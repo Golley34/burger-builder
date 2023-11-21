@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Burger from "../../components/Burger/Burger";
 import IIngredients from "../../interfaces/IIngredients";
 import BuildControls from "../../components/BuildControls/BuildControls";
 import IIngredientsPrices from "../../interfaces/IIngredientsPrices";
 import IDisabledInfo from "../../interfaces/IDisabledInfo";
+import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 
 const BurgerBuilder = () => {
     const [ingredients, setIngredients] = useState<IIngredients>({
@@ -13,13 +15,15 @@ const BurgerBuilder = () => {
         meat: 0
     })
 
-    const [totalPrice, setTotalPrice] = useState<number>(200)
+    const [purchasable, setPurchasable] = useState(false)
+    const [purchasing, setPurchasing] = useState(false)
+    const [totalPrice, setTotalPrice] = useState<number>(100)
 
     const INGREDIENT_PRICES: IIngredientsPrices = {
-        salad: 50,
-        bacon: 300,
-        cheese: 200,
-        meat: 500
+        salad: 10,
+        bacon: 60,
+        cheese: 40,
+        meat: 100
     }
 
     const addIngredientHandler = (type: string): void => {
@@ -33,6 +37,7 @@ const BurgerBuilder = () => {
 
         setIngredients(updatedIngredients)
         setTotalPrice(newPrice)
+        updatePurchaseState(updatedIngredients)
     }
 
     const removeIngredientHandler = (type: string): void => {
@@ -48,6 +53,7 @@ const BurgerBuilder = () => {
 
         setIngredients(updatedIngredients)
         setTotalPrice(newPrice)
+        updatePurchaseState(updatedIngredients)
     }
 
     const disabledIngredients = {...ingredients}
@@ -62,8 +68,39 @@ const BurgerBuilder = () => {
         disabledInfo[key] = disabledIngredients[key] <= 0
     }
 
+    const updatePurchaseState = (ingredients: IIngredients) => {
+        const sum = Object.keys(ingredients)
+          .map(igKey => ingredients[igKey])
+          .reduce((sum, el) => sum + el, 0)
+    
+          setPurchasable(sum > 0)
+    }
+
+    const purchaseHandler = () => {
+        setPurchasing(true)
+    }
+
+    const purchaseCancelHandler = () => {
+        setPurchasing(false)
+    }
+
+    const purchaseContinueHandler = () => {
+        alert('You continued!')
+    }
+
     return (
         <>
+            <Modal
+                show={purchasing}
+                closed={purchaseCancelHandler}
+            >
+                <OrderSummary
+                    ingredients={ingredients}
+                    totalPrice={totalPrice}
+                    purchaseCancelled={purchaseCancelHandler}
+                    purchaseContinued={purchaseContinueHandler}
+                />
+            </Modal>
             <Burger ingredients={ingredients}/>
             <BuildControls 
                 ingredients={ingredients}
@@ -71,6 +108,8 @@ const BurgerBuilder = () => {
                 ingredientAdded={addIngredientHandler}
                 ingredientRemoved={removeIngredientHandler}
                 disabledInfo={disabledInfo}
+                purchasable={purchasable}
+                ordered={purchaseHandler}
             />
         </>
     );

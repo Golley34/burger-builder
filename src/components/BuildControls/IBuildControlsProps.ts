@@ -7,4 +7,6 @@ export default interface IBuildControlsProps {
     ingredientAdded(key: string): void
     ingredientRemoved(key: string): void
     disabledInfo: IDisabledInfo 
+    purchasable: boolean
+    ordered: React.MouseEventHandler<HTMLButtonElement>
 }
