@@ -6,8 +6,12 @@ import IIngredientsPrices from "../../interfaces/IIngredientsPrices";
 import IDisabledInfo from "../../interfaces/IDisabledInfo";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
+import { createSearchParams, useNavigate } from 'react-router-dom';
+
 
 const BurgerBuilder = () => {
+    const navigate = useNavigate()
+
     const [ingredients, setIngredients] = useState<IIngredients>({
         salad: 0,
         bacon: 0,
@@ -85,7 +89,8 @@ const BurgerBuilder = () => {
     }
 
     const purchaseContinueHandler = () => {
-        alert('You continued!')
+        const params = new (createSearchParams as any)(ingredients)
+        navigate({pathname: '/checkout', search: params.toString()})
     }
 
     return (
