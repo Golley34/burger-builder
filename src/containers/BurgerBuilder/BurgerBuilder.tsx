@@ -7,6 +7,7 @@ import IDisabledInfo from "../../interfaces/IDisabledInfo";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { INGREDIENT_PRICES } from "../../components/constants/ingredients_prices";
 
 
 const BurgerBuilder = () => {
@@ -22,13 +23,6 @@ const BurgerBuilder = () => {
     const [purchasable, setPurchasable] = useState(false)
     const [purchasing, setPurchasing] = useState(false)
     const [totalPrice, setTotalPrice] = useState<number>(100)
-
-    const INGREDIENT_PRICES: IIngredientsPrices = {
-        salad: 10,
-        bacon: 60,
-        cheese: 40,
-        meat: 100
-    }
 
     const addIngredientHandler = (type: string): void => {
         const oldCount = ingredients[type]

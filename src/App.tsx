@@ -2,8 +2,19 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
 import ContactData from "./containers/Checkout/ContactData/ContactData";
+import { apiBurger } from "./api/apiBurger";
+import { useEffect } from 'react'
 
 function App() {
+  const getOrders = async () => {
+    const data = await apiBurger.getOrders()
+    console.log('DATA', data);
+  }
+
+  useEffect(() => {
+    getOrders()
+  }, [])
+  
   return (
     <div className="App">
       <BrowserRouter>

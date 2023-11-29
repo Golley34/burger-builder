@@ -1,3 +1,5 @@
-export const parseSearch = (searchParams: URLSearchParams) => {
-    return Object.fromEntries(searchParams)
+import IIngredients from "../interfaces/IIngredients"
+
+export const parseSearch = (searchParams: any) => {
+    return Object.fromEntries<number>(searchParams)
 }
