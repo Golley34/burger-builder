@@ -3,6 +3,8 @@ import {apiBurger} from "../../api/apiBurger";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import OrderItem from '../../components/Order/OrderItem/OrderItem';
 import IResponse from '../../interfaces/IResponse';
+import WithErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler';
+import { burgerInstance } from '../../api/instances';
 
 
 
@@ -16,8 +18,6 @@ const Orders = () => {
         try {
             const response: IResponse[] = await apiBurger.getOrders()
             setOrders(response);
-            console.log(response);
-            
         } finally {
             setLoading(false);
         }
@@ -25,7 +25,6 @@ const Orders = () => {
 
     useEffect(() => {
         getOrders()
-        console.log(orders);
     }, [])
 
     return (
@@ -47,4 +46,4 @@ const Orders = () => {
     )
 }
 
-export default Orders
+export default WithErrorHandler(Orders, burgerInstance)
